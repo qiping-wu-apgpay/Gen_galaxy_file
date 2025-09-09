@@ -1,0 +1,26 @@
+{
+  // 交易数据生成器配置文件示例
+  // 文件类型：B 或 M
+  "file_type": "M",
+  
+  // 业务类型配置列表
+  "business_types": [
+    {
+      // 业务类型名称 (目前支持: hotel)
+      "business_type": "hotel",
+      // 交易记录数量
+      "count": 3
+    },
+    {
+      // 可以添加多个相同业务类型的配置
+      "business_type": "hotel",
+      "count": 2
+    }
+  ]
+  
+  // 使用说明：
+  // 1. 修改 file_type 为 "B" 或 "M"
+  // 2. 在 business_types 中添加多个业务配置
+  // 3. 交易金额会自动随机生成 (100-2000 AUD)
+  // 4. 生成命令: python3 generate_data.py --config sample_config.json
+}

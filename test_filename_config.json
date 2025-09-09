@@ -1,0 +1,10 @@
+{
+  // 测试文件名格式
+  "file_type": "B",
+  "business_types": [
+    {
+      "business_type": "hotel",
+      "count": 1
+    }
+  ]
+}

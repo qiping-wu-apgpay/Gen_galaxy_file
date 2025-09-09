@@ -1,0 +1,221 @@
+# 默认参数
+default_partner_id: "918171615141"
+
+# Header配置 (74字符)
+header:
+  total_length: 74
+  fields:
+    field_1:
+      type: "fixed"
+      value: "H"
+      length: 1
+    field_2:
+      type: "business_type"  # B或M
+      length: 1
+    field_3:
+      type: "partner_id"
+      length: 12
+    field_4:
+      type: "date"
+      length: 8
+    field_5:
+      type: "fixed"
+      value: "V01.01"
+      length: 6
+    field_6:
+      type: "fixed"
+      value: "    "
+      length: 4
+    field_7:
+      type: "fixed"
+      value: "AU "
+      length: 3
+    field_8:
+      type: "fixed"
+      value: "APGS"
+      length: 4
+    field_9:
+      type: "fixed"
+      value: "000"
+      length: 3
+    field_10:
+      type: "fixed"
+      value: "TP"
+      length: 2
+    field_11:
+      type: "fixed"
+      value: "     "
+      length: 5
+    field_12:
+      type: "sequence"
+      length: 25
+      base: "GALAXY"
+
+# 交易体基础字段配置 (前48个字段，580字符)
+transaction_base_fields:
+  field_1:
+    type: "fixed"
+    value: "D"
+    length: 1
+  field_2:
+    type: "transaction_type"
+    length: 1
+  field_3:
+    type: "card_number"
+    length: 19
+  field_4:
+    type: "fixed"
+    value: "0832"  # 有效期
+    length: 4
+  field_5:
+    type: "fixed"
+    value: "3"  # 文档号格式
+    length: 1
+  field_6:
+    type: "document_number"
+    length: 30
+  field_7:
+    type: "date"
+    offset_days: -2  # 往前推2天
+    length: 8
+  field_8:
+    type: "traveller_name"
+    length: 30
+  field_9:
+    type: "sequence"
+    base: "GALAXYSERIAL"
+    length: 32
+  field_10:
+    type: "fixed"
+    value: "036"  # 货币代码
+    length: 3
+  field_11:
+    type: "fixed"
+    value: "+"
+    length: 1
+  field_12:
+    type: "amount"
+    length: 15
+  field_13:
+    type: "amount"  # 复用金额
+    length: 15
+  field_14:
+    type: "amount"  # 复用金额
+    length: 15
+  field_15:
+    type: "random_digits"
+    digits: 9
+    length: 9
+  field_16:
+    type: "fixed"
+    value: "00050"
+    length: 5
+  field_17:
+    type: "fixed"
+    value: "1"
+    length: 1
+  field_18:
+    type: "fixed"
+    value: "000000000000000000000000000000000000000000000000000000000000000000000"  # 69个0
+    length: 69
+  field_27:
+    type: "fixed"
+    value: "      "
+    length: 6
+  field_28:
+    type: "fixed"
+    value: "APG_QA                "
+    length: 22
+  field_29:
+    type: "fixed"
+    value: "Shanghai     "
+    length: 13
+  field_30:
+    type: "fixed"
+    value: "     "
+    length: 5
+  field_31:
+    type: "fixed"
+    value: "   "
+    length: 3
+  field_32:
+    type: "fixed"
+    value: "12345678"
+    length: 8
+  field_33:
+    type: "fixed"
+    value: "                 "
+    length: 17
+  field_34:
+    type: "fixed"
+    value: "                 "
+    length: 17
+  field_35:
+    type: "fixed"
+    value: "                 "
+    length: 17
+  field_36:
+    type: "dossier_number"
+    length: 20
+  field_37:
+    type: "delivery_number"
+    length: 20
+  field_38:
+    type: "dbi_field"
+    prefix: "PK"
+    length: 17
+  field_39:
+    type: "dbi_field"
+    prefix: "DS"
+    length: 17
+  field_40:
+    type: "dbi_field"
+    prefix: "KS"
+    length: 17
+  field_41:
+    type: "dbi_field"
+    prefix: "AE"
+    length: 17
+  field_42:
+    type: "dbi_field"
+    prefix: "IK"
+    length: 17
+  field_43:
+    type: "dbi_field"
+    prefix: "BD"
+    length: 10
+  field_44:
+    type: "dbi_field"
+    prefix: "PR"
+    length: 17
+  field_45:
+    type: "dbi_field"
+    prefix: "AU"
+    length: 17
+  field_46:
+    type: "dbi_field"
+    prefix: "AK"
+    length: 17
+  field_47:
+    type: "dbi_field"
+    prefix: "RZ"
+    length: 17
+  field_48:
+    type: "fixed"
+    value: "         "
+    length: 9
+
+# Trailer配置 (以T开头)
+trailer:
+  total_length: 7
+  fields:
+    field_1:
+      type: "fixed"
+      value: "T"
+      length: 1
+    field_2:
+      type: "business_type"
+      length: 1
+    field_3:
+      type: "transaction_count"
+      length: 5

@@ -1,0 +1,16 @@
+# 卡号字典配置
+# Card Numbers Dictionary Configuration
+
+card_partners:
+  MA:
+    partner_id: "918171615141"
+    MC_Card:
+      card1:
+        PAN: "5577267762771175"
+        Expiry: "3208"
+  B:
+    partner_id: "999993243243"
+    UATP:
+      card1:
+        PAN: "188861074072876"
+        Expiry: "3908"

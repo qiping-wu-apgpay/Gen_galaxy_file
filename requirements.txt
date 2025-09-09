@@ -1,0 +1,28 @@
+# 交易测试数据生成器依赖包
+# Transaction Test Data Generator Dependencies
+
+# 核心依赖
+python-dateutil>=2.8.2
+pytz>=2023.3
+
+# 配置管理
+pyyaml>=6.0
+
+# 日志记录
+loguru>=0.7.0
+
+# 数据处理
+pandas>=2.0.0
+numpy>=1.24.0
+
+# GUI框架 (用于桌面应用)
+tkinter-tooltip>=2.0.0
+pillow>=10.0.0
+
+# 打包工具
+pyinstaller>=5.13.0
+
+# 开发工具
+pytest>=7.4.0
+black>=23.7.0
+flake8>=6.0.0
