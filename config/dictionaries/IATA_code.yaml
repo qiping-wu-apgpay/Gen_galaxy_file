@@ -1,0 +1,50 @@
+IATA_codes:
+  - AAA  # Ansett Australia
+  - AAL  # American Airlines
+  - ACA  # Air Canada
+  - AFR  # Air France
+  - ANA  # All Nippon Airways
+  - ANZ  # Air New Zealand
+  - ASA  # Alaska Airlines
+  - ASQ  # ExpressJet
+  - AUA  # Austrian Airlines
+  - AZA  # Alitalia
+  - BAW  # British Airways
+  - BER  # Air Berlin
+  - CAL  # China Airlines
+  - CCA  # Air China
+  - CES  # China Eastern Airlines
+  - CHH  # Hainan Airlines
+  - CPA  # Cathay Pacific
+  - CSN  # China Southern Airlines
+  - CUA  # China United Airlines
+  - DLH  # Lufthansa
+  - EIN  # Aer Lingus
+  - ETD  # Etihad Airways
+  - EVA  # EVA Air
+  - FIN  # Finnair
+  - GIA  # Garuda Indonesia
+  - HAL  # Hawaiian Airlines
+  - JAL  # Japan Airlines
+  - JBU  # JetBlue Airways
+  - KAL  # Korean Air
+  - KLM  # KLM Royal Dutch Airlines
+  - KQA  # Kenya Airways
+  - MAS  # Malaysia Airlines
+  - NAX  # Norwegian Air Shuttle
+  - PAL  # Philippine Airlines
+  - QFA  # Qantas
+  - QTR  # Qatar Airways
+  - RBA  # Royal Brunei Airlines
+  - RJA  # Royal Jordanian
+  - SIA  # Singapore Airlines
+  - SWR  # Swiss International Air Lines
+  - THA  # Thai Airways
+  - UAE  # Emirates
+  - UAL  # United Airlines
+  - VOZ  # Virgin Australia
+  - VJC  # VietJet Air
+  - VNA  # Vietnam Airlines
+  - WJA  # WestJet
+  - XAX  # AirAsia X
+  - ZH   # Shenzhen Airlines

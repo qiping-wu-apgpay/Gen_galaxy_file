@@ -71,9 +71,6 @@ def run_cli():
             count=args.count,
             output_filename=args.output
         )
-        
-        print(f"\n✅ 文件生成成功: {filepath}")
-        
     except FileNotFoundError as e:
         print(f"❌ 文件未找到: {e}")
         sys.exit(1)

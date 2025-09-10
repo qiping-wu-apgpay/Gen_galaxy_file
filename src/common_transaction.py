@@ -77,7 +77,7 @@ class CommonTransaction:
         return "".join(fields)
     
     def generate_common_fields(self, file_type: str) -> list:
-        """生成交易记录的公共字段（1-5, 7-48, 50字段）"""
+        """生成交易记录的公共字段(1-5, 7-48, 50字段)"""
         fields = []
         
         # 1. RECORD_TYPE (1位)
@@ -87,7 +87,7 @@ class CommonTransaction:
         if file_type == "B":
             transaction_type = "F"  # B类型文件只能是F类型交易
         else:  # M类型文件可以有多种交易类型
-            transaction_type = random.choice(["H", "A", "C", "F", "O", "S", "T"])
+            transaction_type = random.choice(["A", "C", "H", "F", "O", "S", "T"])
         fields.append(transaction_type)
         
         # 3. CARD_NUMBER (19位)
@@ -144,7 +144,7 @@ class CommonTransaction:
         return fields
     
     def _generate_amount_fields(self) -> list:
-        """生成金额相关字段（10-17字段）"""
+        """生成金额相关字段(10-17字段)"""
         fields = []
         
         # 10. TRANSACTION_CURRENCY_CODE (3位)
@@ -153,7 +153,7 @@ class CommonTransaction:
         # 11. TRANSACTION_SIGN (1位)
         fields.append("+")
         
-        # 12. TRANSACTION_AMOUNT (15位)
+        # 12. TRANSACTION_AMOUNT (15位)，金额精确到分
         amount_str = f"{int(self.last_generated_amount * 100):015d}"
         fields.append(amount_str)
         

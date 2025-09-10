@@ -15,7 +15,7 @@ import random
 from datetime import datetime, timedelta
 
 
-class HotelServiceDesc:
+class ServiceDescHotel:
     """酒店服务描述生成器类"""
     
     def __init__(self, config_dir: str = "config"):
@@ -100,7 +100,7 @@ class HotelServiceDesc:
         fields.append("0" * 15)
         
         # 34. 酒店描述 (25位)
-        fields.append("Hotle_descript       end ")
+        fields.append(" Hotle_descript      end ")
         
         service_description = "".join(fields)
         

@@ -13,7 +13,13 @@ from typing import Dict, List, Any
 
 from txn_errors import FileTypeError
 from common_transaction import CommonTransaction
-from hotel_serviceDesc import HotelServiceDesc
+from serviceDesc_hotel import ServiceDescHotel
+from serviceDesc_train import ServiceDescTrain
+from serviceDesc_car import ServiceDescCar
+from serviceDesc_ship import ServiceDescShip
+from serviceDesc_A import ServiceDescA
+from serviceDesc_other import ServiceDescOther
+from serviceDesc_flight import ServiceDescFlight
 
 
 class FullTransactionMerger:
@@ -30,7 +36,13 @@ class FullTransactionMerger:
         
         # 初始化生成器
         self.common = CommonTransaction(config_dir)
-        self.hotel = HotelServiceDesc(config_dir)
+        self.hotel = ServiceDescHotel(config_dir)
+        self.train = ServiceDescTrain()
+        self.car = ServiceDescCar()
+        self.ship = ServiceDescShip(config_dir)
+        self.fee = ServiceDescA()
+        self.other = ServiceDescOther()
+        self.flight = ServiceDescFlight(config_dir)
     
     def generate_file(self, file_type: str, count: int = 1, output_filename: str = None) -> str:
         """生成完整的交易数据文件"""
@@ -71,8 +83,8 @@ class FullTransactionMerger:
                 f.write(line + '\n')
         
         print(f"\n✅ 文件生成成功: {filepath}")
-        print(f"📊 总交易记录数: {count}")
-        print(f"📁 总文件行数: {len(lines)} (头: 1, 交易: {count}, 尾: 1)")
+        print(f"    📊 总交易记录数: {count}")
+        print(f"    📁 总文件行数: {len(lines)} (头: 1, 交易: {count}, 尾: 1)")
         
         return filepath
     
@@ -89,13 +101,37 @@ class FullTransactionMerger:
             # H类型使用酒店服务描述
             doc_number = self.hotel.generate_document_number()
             service_desc = self.hotel.generate_service_description(self.common.last_generated_amount)
+        elif transaction_type == "T":
+            # T类型使用火车票服务描述
+            doc_number = self.train.generate_document_number()
+            service_desc = self.train.generate_service_description(self.common.last_generated_amount)
+        elif transaction_type == "C":
+            # C类型使用租车服务描述
+            doc_number = self.car.generate_document_number()
+            service_desc = self.car.generate_service_description(self.common.last_generated_amount)
+        elif transaction_type == "S":
+            # S类型使用邮轮服务描述
+            doc_number = self.ship.generate_document_number()
+            service_desc = self.ship.generate_service_description(self.common.last_generated_amount)
+        elif transaction_type == "A":
+            # A类型使用服务费业务描述
+            doc_number = self.fee.generate_document_number()
+            service_desc = self.fee.generate_service_description(self.common.last_generated_amount)
+        elif transaction_type == "O":
+            # O类型使用其他业务描述
+            doc_number = self.other.generate_document_number()
+            service_desc = self.other.generate_service_description(self.common.last_generated_amount)
+        elif transaction_type == "F":
+            # F类型使用机票业务描述
+            doc_number = self.flight.generate_document_number(file_type)
+            service_desc = self.flight.generate_service_description(self.common.last_generated_amount)
         else:
             # 其他类型暂时使用空白填充
             doc_number = " " * 30  # 第6字段，30位
             service_desc = " " * 270  # 第49字段，270位
         
         # 3. 合并完整记录
-        # 插入文档号到第6个位置（索引5）
+        # 插入文档号到第6个位置
         common_fields.insert(5, doc_number)
         # 插入服务描述到倒数第二个位置（50字段前）
         common_fields.insert(-1, service_desc)
