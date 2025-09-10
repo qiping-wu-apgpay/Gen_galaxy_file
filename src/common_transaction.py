@@ -177,7 +177,7 @@ class CommonTransaction:
         return fields
     
     def _generate_merchant_fields(self) -> list:
-        """生成商户和代理相关字段（27-48字段）"""
+        """生成商户和代理相关字段(27-48字段)"""
         fields = []
         
         # 27. APPROVAL_CODE (6位)
