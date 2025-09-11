@@ -3,7 +3,6 @@
 """
 机票业务描述生成器
 """
-
 import random
 import yaml
 import os
@@ -12,60 +11,14 @@ from typing import Tuple
 
 class ServiceDescFlight:
     """机票业务描述生成器类"""
-
+    
     def __init__(self, config_dir: str = "config"):
-        """初始化，加载IATA代码"""
-        self.config_dir = config_dir
-        self.iata_codes = self._load_iata_codes()
-
-    def _load_iata_codes(self) -> list:
-        """加载IATA代码"""
-        iata_file = os.path.join(self.config_dir, "dictionaries", "IATA_code.yaml")
-        with open(iata_file, 'r', encoding='utf-8') as f:
-            iata_data = yaml.safe_load(f)
-        return [code.strip() for code in iata_data['IATA_codes']]
-
-    def _generate_dn_lcc_prefix(self, file_type: str) -> str:
-        """生成DN_LCC_PREFIX(3位)
-            如果文件类型是BSP:这个参数可能的组合是:
-            1. 随机三位数的IATA航空公司代码
-            2. 三个字符的ICAO航空公司代码
-            3. 两个字符+1个空格
-        如果文件类型是MA:
-        随机生成3个字母
-        """
-        if file_type == "B":
-            choice = random.randint(1, 3)
-            if choice == 1:
-                # IATA航空公司代码
-                return random.choice(self.iata_codes)
-            elif choice == 2:
-                # ICAO航空公司代码（模拟生成）
-                return ''.join(random.choices('ABCDEFGHIJKLMNOPQRSTUVWXYZ', k=3))
-            else:
-                # 两个字符+1个空格
-                return ''.join(random.choices('ABCDEFGHIJKLMNOPQRSTUVWXYZ', k=2)) + ' '
-        else:
-            # MA类型：随机生成3个字母
-            return ''.join(random.choices('ABCDEFGHIJKLMNOPQRSTUVWXYZ', k=3))
-
-    def _generate_dn_lcc_filekey(self, file_type: str) -> str:
-        """生成DN_LCC_FILEKEY(8位)
-        如果文件类型是BSP:这个参数数是:
-            5-7位数字字符混合。用空格填充到右侧,长度为8
-            如果文件类型是MA:
-            随机5个数字+3个空格
-        """
-        if file_type == "B":
-            # 生成5-7位数字字符混合
-            length = random.randint(5, 7)
-            chars = ''.join(random.choices('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', k=length))
-            return chars + ' ' * (8 - length)
-        else:
-            # MA类型：随机5个数字+3个空格
-            nums = ''.join(random.choices('0123456789', k=5))
-            return nums + ' ' * 3
-
+        """初始化机票业务描述生成器"""
+        # 加载IATA代码
+        iata_codes_path = os.path.join(config_dir, "dictionaries/IATA_code.yaml")
+        with open(iata_codes_path, "r", encoding="utf-8") as f:
+            self.iata_codes = [line.strip() for line in f if line.strip() and not line.strip().startswith("#")]
+    
     def generate_document_number(self, file_type: str = "B") -> str:
         """
         【第6个参数,30位】生成文档号
@@ -77,22 +30,25 @@ class ServiceDescFlight:
             doc_number = "888" + random_digits + " " * 17
             return doc_number[:30]
         else:
-            prefix = self._generate_dn_lcc_prefix(file_type)
-            filekey = self._generate_dn_lcc_filekey(file_type)
-            filler = ' ' * 19  # DN_LCC_FILLER固定19个空格
+            # doc_number: 3位IATA+8位filekey+19位空格，总共30位
+            
+            # 从已加载的IATA代码中随机取一个3位IATA
+            valid_codes = [code for code in self.iata_codes if len(code.strip()) == 3]
+            if not valid_codes:
+                # 如果没有找到合适的代码，生成一个随机的3位代码
+                prefix = ''.join(random.choices('ABCDEFGHIJKLMNOPQRSTUVWXYZ', k=3))
+            else:
+                prefix = random.choice(valid_codes).strip()
+            if file_type == "B":
+                # 生成8位filekey
+                next7 = ''.join(random.choices('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', k=7))
+                filekey = next7 + ' '  # 8位
+            else:
+                # 生成8位filekey，仅数字
+                filekey = ''.join(random.choices('0123456789', k=8))
+            filler = ' ' * 19
             doc_number = prefix + filekey + filler
             return doc_number[:30]
-        """【第6个参数,30位】生成文档号
-        包含三个部分：
-        1. DN_LCC_PREFIX: AN类型,3位
-        2. DN_LCC_FILEKEY: AN类型,8位
-        3. DN_LCC_FILLER: AN类型,19位空格
-        """
-        prefix = self._generate_dn_lcc_prefix(file_type)
-        filekey = self._generate_dn_lcc_filekey(file_type)
-        filler = ' ' * 19  # DN_LCC_FILLER固定19个空格
-        doc_number = prefix + filekey + filler
-        return doc_number
 
     def _generate_random_tax_amount(self) -> str:
         """生成13位的税费金额
@@ -105,17 +61,14 @@ class ServiceDescFlight:
         return tax_amount
 
     def _generate_tax_type(self) -> str:
-        """生成2位的税费类型
-        从XF、MF中随机取一个
-        """
+        """生成2位的税费类型、从XF、MF中随机取一个"""
         tax_type = random.choice(['XF', 'MF'])
         if len(tax_type) != 2:
             raise ValueError(f"税费类型长度错误: {len(tax_type)}, 应为2位")
         return tax_type
 
     def _generate_flight_number(self) -> str:
-        """生成4位航班号
-        格式:1个字母+3个数字
+        """生成4位航班号,格式:1个字母+3个数字
         """
         letter = random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
         numbers = ''.join(random.choices('0123456789', k=3))
@@ -125,20 +78,7 @@ class ServiceDescFlight:
         return flight_number
 
     def generate_service_description(self, amount: float) -> str:
-        """
-        【第49个参数,270位】生成服务描述
-
-        为什么这里的长度会有问题？
-
-        主要原因在于IATA_code.yaml中的IATA代码有可能不是3位，而是2位（如"ZH"），
-        但本字段要求严格3位长度。如果直接用2位字符串填充，最终拼接的服务描述长度就会少1位，
-        导致整体长度不足270位。
-
-        解决方法：需要保证所有IATA相关字段（如出发地、目的地、航空公司）都严格为3位，
-        如果不足3位则右侧补空格。
-
-        下面代码已修正此问题。
-        """
+        """第49个参数,270位】生成服务描述"""   
         fields = []
 
         # 1. SD_FLIGHT_DEPARTURE_DATE：8位，必须包含第一个航段的出发日期
@@ -146,8 +86,12 @@ class ServiceDescFlight:
         fields.append(departure_date.strftime("%Y%m%d"))
 
         # 2. SD_FLIGHT_ORIGIN_LOCATION：3位，从IATA_code.yaml中随机取一个，需补足3位
-        origin_code = random.choice(self.iata_codes)
-        origin_code = origin_code.ljust(3)[:3]
+        valid_codes = [code for code in self.iata_codes if len(code.strip()) == 3]
+        if not valid_codes:
+            # 如果没有找到合适的出发地代码，生成一个随机的3位代码
+            origin_code = ''.join(random.choices('ABCDEFGHIJKLMNOPQRSTUVWXYZ', k=3))
+        else:
+            origin_code = random.choice(valid_codes).strip()
         fields.append(origin_code)
 
         # 3. SD_FLIGHT_CRS：4位，默认4个空格
@@ -165,14 +109,21 @@ class ServiceDescFlight:
             fields.append(self._generate_tax_type())          # TAX_N_TYPE：2位
 
         # 10. SD_FLIGHT_SEG_1_DESTINATION：3位，从IATA_code.yaml中随机取一个（不能与出发地相同），需补足3位
-        available_codes = [code for code in self.iata_codes if code != origin_code.strip()]
-        dest_code = random.choice(available_codes)
-        dest_code = dest_code.ljust(3)[:3]
+        valid_codes = [code for code in self.iata_codes if len(code.strip()) == 3 and code.strip() != origin_code]
+        if not valid_codes:
+            # 如果没有找到合适的目的地代码，生成一个随机的3位代码
+            dest_code = ''.join(random.choices('ABCDEFGHIJKLMNOPQRSTUVWXYZ', k=3))
+        else:
+            dest_code = random.choice(valid_codes).strip()
         fields.append(dest_code)
 
         # 11. SD_FLIGHT_SEG_1_AIRLINE：3位，从IATA_code.yaml中随机取一个，需补足3位
-        airline_code = random.choice(self.iata_codes)
-        airline_code = airline_code.ljust(3)[:3]
+        valid_codes = [code for code in self.iata_codes if len(code.strip()) == 3]
+        if not valid_codes:
+            # 如果没有找到合适的航空公司代码，生成一个随机的3位代码
+            airline_code = ''.join(random.choices('ABCDEFGHIJKLMNOPQRSTUVWXYZ', k=3))
+        else:
+            airline_code = random.choice(valid_codes).strip()
         fields.append(airline_code)
 
         # 12. SD_FLIGHT_SEG_1_FLIGHT：4位，生成航班号

@@ -35,16 +35,20 @@ class ServiceDescA:
         fields.append("???" if originator == "O" else " " * 3)
 
         # 3. SD_FEE_DOC_NUMBER_FORMAT：1位
-        fields.append(str(random.choice([0, 1])))
+        # 如果originator为F时，FORMAT是1，否则FORMAT是0
+        if originator == "F":
+            fields.append("1")
+        else:
+            fields.append("0")
 
         # 4. SD_FEE_REL_DOC_NUMBER：30位
-        # 根据0和1判断,前面8位是年月日 + 两位随机数 + 88 + 后面3位自增数 + 15个空格
         doc_number_format = int(fields[2])
         if doc_number_format == 0:
             rel_doc_number = " " * 30
         else:
-            random_digits = "".join([str(random.randint(0, 9)) for _ in range(7)])
-            rel_doc_number = "888" + random_digits + " " * 20
+            date_part = datetime.now().strftime("%y%m%d")  # 6位年月日
+            rand = "".join([str(random.randint(0, 9)) for _ in range(7)])  # 7位随机数
+            rel_doc_number = date_part + rand + " " * 17
             rel_doc_number = rel_doc_number[:30]
         fields.append(rel_doc_number)
 

@@ -6,8 +6,11 @@ card_partners:
     partner_id: "918171615141"
     MC_Card:
       card1:
-        PAN: "5577267762771175"
-        Expiry: "3208"
+        PAN: "5577267765251118"
+        Expiry: "3908"
+
+        # PAN: "5577267762771175"
+        # Expiry: "3208"
   B:
     partner_id: "999993243243"
     UATP:
